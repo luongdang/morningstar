@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=eksctl_schema.json
+
+kind: ClusterConfig
+apiVersion: eksctl.io/v1alpha5
+metadata:
+  name: morningstar
+  region: ca-central-1
+  version: "1.24"
+
+managedNodeGroups:
+  - name: morningstar-ng1a-public
+    instanceType: t2.micro
+    availabilityZones:
+      - ca-central-1a
+    minSize: 2
+    maxSize: 5
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+    labels:
+      zone: ca-central-1a
+
+  - name: morningstar-ng1b-public
+    instanceType: t2.micro
+    availabilityZones:
+      - ca-central-1b
+    minSize: 2
+    maxSize: 5
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+    labels:
+      zone: ca-central-1b
