@@ -7,6 +7,13 @@ metadata:
   region: ca-central-1
   version: "1.24"
 
+iam:
+  serviceAccounts:
+    - metadata:
+        name: AmazonEKSLoadBalancerControllerRole
+      attachPolicyARNs:
+        - arn:aws:iam::922366850369:policy/AWSLoadBalancerControllerIAMPolicy
+
 managedNodeGroups:
   - name: morningstar-ng1a-public
     instanceType: t2.micro
