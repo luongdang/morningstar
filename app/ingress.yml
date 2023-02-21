@@ -1,14 +1,21 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: time-management
+  name: timeoff-management
   namespace: app
   labels:
-    name: time-management
+    name: timeoff-management
   annotations:
+    # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/ingress/annotations/
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ca-central-1:922366850369:certificate/c73bc322-7c08-4e0e-8ada-8e001b733c53
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
     external-dns.alpha.kubernetes.io/hostname: morningstar.ldresearch.ca
+    #
+    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/acme-challenge-type: dns01
 spec:
   ingressClassName: alb
   rules:
@@ -21,3 +28,7 @@ spec:
                 name: timeoff-management
                 port:
                   number: 3000
+  # tls:
+  #   - hosts:
+  #       - morningstar.ldresearch.ca
+  #     secretName: frontend-tls
