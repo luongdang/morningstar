@@ -1,7 +1,7 @@
 FROM node:14.21.3
 EXPOSE 3000
 
-# Install SQLite & Python
+# Install SQLite
 RUN apt update -y
 RUN apt install -y sqlite3
 

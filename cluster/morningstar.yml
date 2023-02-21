@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=eksctl_schema.json
+# yaml-language-server: $schema=eksctl.schema.json
 
 kind: ClusterConfig
 apiVersion: eksctl.io/v1alpha5
@@ -7,34 +7,47 @@ metadata:
   region: ca-central-1
   version: "1.24"
 
-iam:
-  serviceAccounts:
-    - metadata:
-        name: AmazonEKSLoadBalancerControllerRole
-      attachPolicyARNs:
-        - arn:aws:iam::922366850369:policy/AWSLoadBalancerControllerIAMPolicy
-
 managedNodeGroups:
-  - name: morningstar-ng1a-public
+  - name: morningstar-nodegroup-1a
     instanceType: t2.micro
     availabilityZones:
       - ca-central-1a
     minSize: 2
     maxSize: 5
-    iam:
-      withAddonPolicies:
-        autoScaler: true
     labels:
       zone: ca-central-1a
 
-  - name: morningstar-ng1b-public
+  - name: morningstar-nodegroup-1b
     instanceType: t2.micro
     availabilityZones:
       - ca-central-1b
     minSize: 2
     maxSize: 5
-    iam:
-      withAddonPolicies:
-        autoScaler: true
     labels:
       zone: ca-central-1b
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: kube-system
+      # roleName: AWSEKSLoadBalancerControllerRole
+      # attachPolicyARNs:
+      #   - arn:aws:iam::922366850369:policy/AWSLoadBalancerControllerIAMPolicy
+      wellKnownPolicies:
+        awsLoadBalancerController: true
+    - metadata:
+        name: external-dns
+        namespace: app
+      # roleName: ExternalDNSRole
+      # attachPolicyARNs:
+      #   - "arn:aws:iam::922366850369:policy/ExternalDNSIAMPolicy"
+      wellKnownPolicies:
+        externalDNS: true
+        
+    - metadata:
+        name: cert-manager
+        namespace: cert-manager
+      wellKnownPolicies:
+        certManager: true
