@@ -17,11 +17,9 @@ trigger:
   branches:
     include:
       - main
-      - pipelines # TODO: remove this
   paths:
     include:
       - cluster/*
-      - pipelines/cluster.yml # TODO: remove this
 
 parameters:
   - name: mode

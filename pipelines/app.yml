@@ -5,11 +5,9 @@ trigger:
   branches:
     include:
       - main
-      - pipelines # TODO: remove this
   paths:
     include:
       - app/*
-      - pipelines/app.yml # TODO: remove this
 
 variables:
   - group: aws-credentials
