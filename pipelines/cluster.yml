@@ -1,6 +1,6 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
-name: 1.0.$(Rev:.r)
+name: 1.0$(Rev:.r)
 trigger: 
   branches:
     include:
@@ -25,6 +25,8 @@ stages:
       - job: create_cluster
         displayName: Create Cluster
         steps:
+          - template: configure_aws.yml
+            displayName: Configure AWS
           - bash: |
               eksctl create cluster -f cluster/morningstar.yml
 
@@ -35,5 +37,7 @@ stages:
       - job: update_cluster
         displayName: Update Cluster
         steps:
+          - template: configure_aws.yml
+            displayName: Configure AWS
           - bash: |
               eksctl upgrade cluster -f cluster/morningstar.yml

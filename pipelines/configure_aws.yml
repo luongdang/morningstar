@@ -1,0 +1,10 @@
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
+
+steps:
+  - bash: |
+      set -ueo pipefail
+
+      curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+      sudo mv /tmp/eksctl /usr/local/bin
+      eksctl version
+    displayName: Install eksctl
