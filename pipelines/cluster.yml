@@ -1,6 +1,6 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
-name: 1.0.{$Rev:.r}
+name: 1.0.${Rev:.r}
 trigger: 
   branches:
     include:
@@ -8,6 +8,7 @@ trigger:
   paths:
     include:
       - cluster/morningstar.yml
+      - pipelines/cluster.yml # TODO: remove this
 
 parameters:
   - name: create_cluster
@@ -28,7 +29,7 @@ stages:
 
   - stage: update_cluster
     displayName: Update Cluster
-    condition: eq('${{ parameters.create_cluster }}', 'true')
+    condition: eq('${{ parameters.create_cluster }}', 'false')
     jobs:
       - job: update_cluster
         displayName: Update Cluster
