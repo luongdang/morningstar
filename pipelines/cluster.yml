@@ -22,7 +22,7 @@ parameters:
     default: update
 
 variables: 
-  group: aws-credentials
+  - group: aws-credentials
 
 stages:
   - stage: create_cluster
@@ -44,11 +44,11 @@ stages:
         displayName: Update Cluster
         steps:
           - bash: env
-            displayName: debug
+            displayName: Debug
             env:
-              AWS_ACCESS_KEY_ID: $[variables.AWS_ACCESS_KEY_ID]
+              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
 
           - template: configure_aws.yml
           - bash: eksctl upgrade cluster -f cluster/morningstar.yml
