@@ -26,7 +26,6 @@ stages:
         displayName: Create Cluster
         steps:
           - template: configure_aws.yml
-            displayName: Configure AWS
           - bash: |
               eksctl create cluster -f cluster/morningstar.yml
 
@@ -38,6 +37,5 @@ stages:
         displayName: Update Cluster
         steps:
           - template: configure_aws.yml
-            displayName: Configure AWS
           - bash: |
               eksctl upgrade cluster -f cluster/morningstar.yml
