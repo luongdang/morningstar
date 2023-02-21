@@ -41,20 +41,11 @@ stages:
         condition: eq('${{ parameters.mode }}', 'update')
         steps:
           - template: configure_aws.yml
-          - bash: eksctl upgrade cluster -f cluster/morningstar.yml
+          - bash: |
+              set -xueo pipefail
+              eksctl upgrade cluster -f cluster/morningstar.yml
+              eksctl update iamserviceaccount -f cluster/morningstar.yml
             displayName: Update Cluster
-            env:
-              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
-          - bash: eksctl upgrade nodegroup -f cluster/morningstar.yml
-            displayName: Update Nodegroup
-            env:
-              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
-          - bash: eksctl update iamserviceaccount -f cluster/morningstar.yml
-            displayName: Update Service Accounts
             env:
               AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
