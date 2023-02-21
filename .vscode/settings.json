@@ -2,7 +2,8 @@
     "yaml.schemas": {
         "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json": [
             "file:///Users/powerbook/Developer/experiments/morningstar/pipelines/cluster.yml",
-            "file:///c%3A/Users/luong.dang/Developer/experiments/morningstar/pipelines/cluster.yml"
+            "file:///c%3A/Users/luong.dang/Developer/experiments/morningstar/pipelines/cluster.yml",
+            "file:///c%3A/Users/luong.dang/Developer/experiments/morningstar/pipelines/app.yml"
         ]
     }
 }

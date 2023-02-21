@@ -1,0 +1,27 @@
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
+
+name: 1.0$(Rev:.r)
+trigger:
+  branches:
+    include:
+      - main
+      - pipelines # TODO: remove this
+  paths:
+    include:
+      - app/*
+      - pipelines/app.yml # TODO: remove this
+
+jobs:
+  - job: update_app
+    steps:
+      - template: steps_configure_aws.yml
+      - bash: |
+          set -xueo pipefail
+
+          eksctl utils write-kubeconfig -f cluster/morningstar.yml
+          kubectl config current-context
+          
+          kubectl apply -f app/dns.yml
+          kubectl apply -f app/timeoff-management.yml
+          kubectl apply -f app/ingress.yml
+        displayName: Debug

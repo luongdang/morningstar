@@ -1,5 +1,17 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
+# This pipeline delivers changes to the EKS cluster. 
+# To update the Timeoff Management app, use the `app.yml` pipeline.
+#
+# There are 3 execution modes:
+#   - create: create the cluster on EKS
+#   - update: update the existing cluster
+#   - delete: remove the cluster from EKS
+#
+# The default mode is `update`, which will be trigger automatically upon every
+# changes to `cluster` folder. `create` and `delete` can be triggered
+# automatically, since they are expected to run far less often than `update`.
+
 name: 1.0$(Rev:.r)
 trigger:
   branches:
@@ -8,7 +20,7 @@ trigger:
       - pipelines # TODO: remove this
   paths:
     include:
-      - cluster/morningstar.yml
+      - cluster/*
       - pipelines/cluster.yml # TODO: remove this
 
 parameters:
@@ -32,7 +44,7 @@ stages:
         condition: eq('${{ parameters.mode }}', 'create')
         displayName: Create Cluster
         steps:
-          - template: configure_aws.yml
+          - template: steps_configure_aws.yml
           - bash: eksctl create cluster -f cluster/morningstar.yml
             displayName: Create Cluster
             env:
@@ -44,7 +56,7 @@ stages:
         displayName: Update Cluster
         condition: eq('${{ parameters.mode }}', 'update')
         steps:
-          - template: configure_aws.yml
+          - template: steps_configure_aws.yml
           - bash: |
               set -xueo pipefail
               eksctl upgrade cluster -f cluster/morningstar.yml --approve
@@ -59,7 +71,7 @@ stages:
         displayName: Delete Cluster
         condition: eq('${{ parameters.mode }}', 'delete')
         steps:
-          - template: configure_aws.yml
+          - template: steps_configure_aws.yml
           - bash: |
               set -xueo pipefail
 
