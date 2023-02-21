@@ -11,6 +11,9 @@ trigger:
       - app/*
       - pipelines/app.yml # TODO: remove this
 
+variables:
+  - group: aws-credentials
+
 jobs:
   - job: update_app
     displayName: Update App
