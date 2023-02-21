@@ -13,6 +13,7 @@ trigger:
 
 jobs:
   - job: update_app
+    displayName: Update App
     steps:
       - template: steps_configure_aws.yml
       - bash: |
@@ -25,3 +26,7 @@ jobs:
           kubectl apply -f app/timeoff-management.yml
           kubectl apply -f app/ingress.yml
         displayName: Debug
+        env:
+          AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+          AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
