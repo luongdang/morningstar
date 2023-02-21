@@ -1,0 +1,37 @@
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
+
+name: 1.0.{$Rev:.r}
+trigger: 
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - cluster/morningstar.yml
+
+parameters:
+  - name: create_cluster
+    displayName: Create new cluster
+    type: boolean
+    default: "false"
+
+stages:
+  - stage: create_cluster
+    displayName: Create Cluster
+    condition: ${{ parameters.create_cluster }} == true
+    jobs:
+      - job: create_cluster
+        displayName: Create Cluster
+        steps:
+          - bash: |
+              eksctl create cluster -f cluster/morningstar.yml
+
+  - stage: update_cluster
+    displayName: Update Cluster
+    condition: ${{ parameters.create_cluster}} == false
+    jobs:
+      - job: update_cluster
+        displayName: Update Cluster
+        steps:
+          - bash: |
+              cksctl upgrade cluster -f cluster/morningstar.yml
