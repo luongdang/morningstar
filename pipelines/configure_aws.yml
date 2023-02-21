@@ -1,10 +1,8 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
 steps:
-  - bash: |
-      env
-      aws configure list
-    displayName: AWS Config
+  - bash: aws configure list
+    displayName: Show AWS Config
     env:
       AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
       AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
