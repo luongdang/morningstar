@@ -43,8 +43,8 @@ stages:
           - template: configure_aws.yml
           - bash: |
               set -xueo pipefail
-              eksctl upgrade cluster -f cluster/morningstar.yml
-              eksctl update iamserviceaccount -f cluster/morningstar.yml
+              eksctl upgrade cluster -f cluster/morningstar.yml --approve
+              eksctl update iamserviceaccount -f cluster/morningstar.yml --approve
             displayName: Update Cluster
             env:
               AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
