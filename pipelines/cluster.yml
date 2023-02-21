@@ -5,6 +5,7 @@ trigger:
   branches:
     include:
       - main
+      - pipelines # TODO: remove this
   paths:
     include:
       - cluster/morningstar.yml
