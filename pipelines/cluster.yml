@@ -51,32 +51,18 @@ stages:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
               AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
 
-    
-# stages:
-#   - stage: create_cluster
-#     displayName: Create Cluster
-#     condition: eq('${{ parameters.mode }}', 'create')
-#     jobs:
-#       - job: create_cluster
-#         displayName: Create Cluster
-#         steps:
-#           - template: configure_aws.yml
-#           - bash: eksctl create cluster -f cluster/morningstar.yml
-#             displayName: Crate Cluster
+      - job: delete_cluster
+        displayName: Delete Cluster
+        condition: eq('${{ parameters.mode }}', 'delete')
+        steps:
+          - template: configure_aws.yml
+          - bash: |
+              set -xueo pipefail
 
-#   - stage: update_cluster
-#     displayName: Update Cluster
-#     condition: eq('${{ parameters.mode }}', 'update')
-#     jobs:
-#       - job: update_cluster
-#         displayName: Update Cluster
-#         steps:
-
-#           - template: configure_aws.yml
-#           - bash: eksctl upgrade cluster -f cluster/morningstar.yml
-#             displayName: Update Cluster
-#           - bash: eksctl update nodegroup -f cluster/morningstar.yml
-#             displayName: Update Nodegroup
-#           - bash: eksctl update iamserviceaccount -f cluster/morningstar.yml
-#             displayName: Update Service Accounts
-
+              kubectl delete namespace app
+              eksctl delete cluster -f cluster/morningstar.yml
+            displayName: Delete Cluster
+            env:
+              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
