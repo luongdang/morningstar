@@ -22,7 +22,7 @@ parameters:
     default: update
 
 variables: 
-  group: AWS Credentials
+  group: aws-credentials
 
 stages:
   - stage: create_cluster
