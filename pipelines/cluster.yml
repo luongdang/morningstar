@@ -33,8 +33,8 @@ stages:
         displayName: Create Cluster
         steps:
           - template: configure_aws.yml
-          - bash: |
-              eksctl create cluster -f cluster/morningstar.yml
+          - bash: eksctl create cluster -f cluster/morningstar.yml
+            displayName: Crate Cluster
 
   - stage: update_cluster
     displayName: Update Cluster
