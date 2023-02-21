@@ -47,7 +47,7 @@ stages:
               AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
               AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
-          - bash: eksctl update nodegroup -f cluster/morningstar.yml
+          - bash: eksctl upgrade nodegroup -f cluster/morningstar.yml
             displayName: Update Nodegroup
             env:
               AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
