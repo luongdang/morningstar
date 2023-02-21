@@ -45,6 +45,10 @@ stages:
         steps:
           - bash: env
             displayName: debug
+            env:
+              AWS_ACCESS_KEY_ID: $[variables.AWS_ACCESS_KEY_ID]
+              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
 
           - template: configure_aws.yml
           - bash: eksctl upgrade cluster -f cluster/morningstar.yml
