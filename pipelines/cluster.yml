@@ -25,7 +25,8 @@ variables:
   - group: aws-credentials
 
 stages:
-  - stage: Cluster Action
+  - stage: cluster_action
+    displayName: Cluster Action
     jobs:
       - job: create_cluster
         condition: eq('${{ parameters.mode }}', 'create')
