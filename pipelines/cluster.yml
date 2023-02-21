@@ -1,6 +1,6 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
-name: 1.0.${Rev:.r}
+name: 1.0.$(Rev:.r)
 trigger: 
   branches:
     include:
