@@ -12,10 +12,14 @@ trigger:
       - pipelines/cluster.yml # TODO: remove this
 
 parameters:
-  - name: create_cluster
-    displayName: Create new cluster
-    type: boolean
-    default: "false"
+  - name: mode
+    displayName: Mode
+    type: string
+    values:
+      - create
+      - update
+      - delete
+    default: update
 
 variables: 
   group: AWS Credentials
@@ -23,7 +27,7 @@ variables:
 stages:
   - stage: create_cluster
     displayName: Create Cluster
-    condition: eq('${{ parameters.create_cluster }}', 'true')
+    condition: eq('${{ parameters.mode }}', 'create')
     jobs:
       - job: create_cluster
         displayName: Create Cluster
@@ -34,7 +38,7 @@ stages:
 
   - stage: update_cluster
     displayName: Update Cluster
-    condition: eq('${{ parameters.create_cluster }}', 'false')
+    condition: eq('${{ parameters.mode }}', 'update')
     jobs:
       - job: update_cluster
         displayName: Update Cluster
