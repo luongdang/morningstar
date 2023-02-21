@@ -44,7 +44,10 @@ stages:
         displayName: Update Cluster
         steps:
           - template: configure_aws.yml
-          - bash: |
-              # eksctl upgrade cluster -f cluster/morningstar.yml
-              echo "Should do something here"
+          - bash: eksctl upgrade cluster -f cluster/morningstar.yml
             displayName: Update Cluster
+          - bash: eksctl update nodegroup -f cluster/morningstar.yml
+            displayName: Update Nodegroup
+          - bash: eksctl update iamserviceaccount -f cluster/morningstar.yml
+            displayName: Update Service Accounts
+          
