@@ -1,7 +1,7 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
 name: 1.0$(Rev:.r)
-trigger: 
+trigger:
   branches:
     include:
       - main
@@ -21,40 +21,56 @@ parameters:
       - delete
     default: update
 
-variables: 
+variables:
   - group: aws-credentials
 
-stages:
-  - stage: create_cluster
-    displayName: Create Cluster
+jobs:
+  - job: create_cluster
     condition: eq('${{ parameters.mode }}', 'create')
-    jobs:
-      - job: create_cluster
-        displayName: Create Cluster
-        steps:
-          - template: configure_aws.yml
-          - bash: eksctl create cluster -f cluster/morningstar.yml
-            displayName: Crate Cluster
-
-  - stage: update_cluster
+    displayName: Create Cluster
+    steps:
+      - template: configure_aws.yml
+      - bash: eksctl create cluster -f cluster/morningstar.yml
+        displayName: Crate Cluster
+        
+  - job: update_cluster
     displayName: Update Cluster
     condition: eq('${{ parameters.mode }}', 'update')
-    jobs:
-      - job: update_cluster
+    steps:
+      - template: configure_aws.yml
+      - bash: eksctl upgrade cluster -f cluster/morningstar.yml
         displayName: Update Cluster
-        steps:
-          - bash: env
-            displayName: Debug
-            env:
-              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
-              AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
+      - bash: eksctl update nodegroup -f cluster/morningstar.yml
+        displayName: Update Nodegroup
+      - bash: eksctl update iamserviceaccount -f cluster/morningstar.yml
+        displayName: Update Service Accounts
 
-          - template: configure_aws.yml
-          - bash: eksctl upgrade cluster -f cluster/morningstar.yml
-            displayName: Update Cluster
-          - bash: eksctl update nodegroup -f cluster/morningstar.yml
-            displayName: Update Nodegroup
-          - bash: eksctl update iamserviceaccount -f cluster/morningstar.yml
-            displayName: Update Service Accounts
-          
+    
+# stages:
+#   - stage: create_cluster
+#     displayName: Create Cluster
+#     condition: eq('${{ parameters.mode }}', 'create')
+#     jobs:
+#       - job: create_cluster
+#         displayName: Create Cluster
+#         steps:
+#           - template: configure_aws.yml
+#           - bash: eksctl create cluster -f cluster/morningstar.yml
+#             displayName: Crate Cluster
+
+#   - stage: update_cluster
+#     displayName: Update Cluster
+#     condition: eq('${{ parameters.mode }}', 'update')
+#     jobs:
+#       - job: update_cluster
+#         displayName: Update Cluster
+#         steps:
+
+#           - template: configure_aws.yml
+#           - bash: eksctl upgrade cluster -f cluster/morningstar.yml
+#             displayName: Update Cluster
+#           - bash: eksctl update nodegroup -f cluster/morningstar.yml
+#             displayName: Update Nodegroup
+#           - bash: eksctl update iamserviceaccount -f cluster/morningstar.yml
+#             displayName: Update Service Accounts
+
