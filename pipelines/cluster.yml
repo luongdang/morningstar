@@ -18,7 +18,7 @@ parameters:
 stages:
   - stage: create_cluster
     displayName: Create Cluster
-    condition: ${{ parameters.create_cluster }} == true
+    condition: eq('${{ parameters.create_cluster }}', 'true')
     jobs:
       - job: create_cluster
         displayName: Create Cluster
@@ -28,10 +28,10 @@ stages:
 
   - stage: update_cluster
     displayName: Update Cluster
-    condition: ${{ parameters.create_cluster}} == false
+    condition: eq('${{ parameters.create_cluster }}', 'true')
     jobs:
       - job: update_cluster
         displayName: Update Cluster
         steps:
           - bash: |
-              cksctl upgrade cluster -f cluster/morningstar.yml
+              eksctl upgrade cluster -f cluster/morningstar.yml
