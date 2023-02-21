@@ -43,6 +43,9 @@ stages:
       - job: update_cluster
         displayName: Update Cluster
         steps:
+          - bash: env
+            displayName: debug
+
           - template: configure_aws.yml
           - bash: eksctl upgrade cluster -f cluster/morningstar.yml
             displayName: Update Cluster

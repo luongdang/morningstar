@@ -1,8 +1,5 @@
 # https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/?view=azure-pipelines
 
-variables:
-  group: AWS Credentials
-
 steps:
   - bash: aws configure list
     displayName: Show AWS Config
