@@ -17,6 +17,9 @@ parameters:
     type: boolean
     default: "false"
 
+variables: 
+  group: AWS Credentials
+
 stages:
   - stage: create_cluster
     displayName: Create Cluster
@@ -38,4 +41,6 @@ stages:
         steps:
           - template: configure_aws.yml
           - bash: |
-              eksctl upgrade cluster -f cluster/morningstar.yml
+              # eksctl upgrade cluster -f cluster/morningstar.yml
+              echo "Should do something here"
+            displayName: Update Cluster
