@@ -35,6 +35,10 @@ stages:
           - template: configure_aws.yml
           - bash: eksctl create cluster -f cluster/morningstar.yml
             displayName: Create Cluster
+            env:
+              AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+              AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+              AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
 
       - job: update_cluster
         displayName: Update Cluster
