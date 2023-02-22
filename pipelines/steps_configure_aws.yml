@@ -12,7 +12,7 @@ steps:
   - bash: |
       set -xueo pipefail
 
-      eksctl utils write-kubeconfig -f cluster/morningstar.yml
+      eksctl utils write-kubeconfig -f cluster/morningstar.yml || ;
       kubectl config current-context
     displayName: Set kubectl config
     env:
