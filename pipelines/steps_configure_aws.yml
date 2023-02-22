@@ -8,3 +8,14 @@ steps:
       sudo mv /tmp/eksctl /usr/local/bin
       echo "eksctl version = $(eksctl version)"
     displayName: Install eksctl
+
+  - bash: |
+      set -xueo pipefail
+
+      eksctl utils write-kubeconfig -f cluster/morningstar.yml
+      kubectl config current-context
+    displayName: Set kubectl config
+    env:
+      AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+      AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+      AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
