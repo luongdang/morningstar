@@ -32,17 +32,11 @@ iam:
     - metadata:
         name: aws-load-balancer-controller
         namespace: kube-system
-      # roleName: AWSEKSLoadBalancerControllerRole
-      # attachPolicyARNs:
-      #   - arn:aws:iam::922366850369:policy/AWSLoadBalancerControllerIAMPolicy
       wellKnownPolicies:
         awsLoadBalancerController: true
     - metadata:
         name: external-dns
         namespace: app
-      # roleName: ExternalDNSRole
-      # attachPolicyARNs:
-      #   - "arn:aws:iam::922366850369:policy/ExternalDNSIAMPolicy"
       wellKnownPolicies:
         externalDNS: true
         

@@ -28,7 +28,3 @@ spec:
                 name: timeoff-management
                 port:
                   number: 3000
-  # tls:
-  #   - hosts:
-  #       - morningstar.ldresearch.ca
-  #     secretName: frontend-tls
