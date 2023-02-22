@@ -8,9 +8,9 @@
 #   - update: update the existing cluster
 #   - delete: remove the cluster from EKS
 #
-# The default mode is `update`, which will be trigger automatically upon every
-# changes to `cluster` folder. `create` and `delete` can be triggered
-# automatically, since they are expected to run far less often than `update`.
+# The default mode is `update`, which will be triggered automatically upon every
+# change to `cluster` folder. `create` and `delete` can only be triggered
+# manually, since they are expected to run far less often than `update`.
 
 name: 1.0$(Rev:.r)
 trigger:

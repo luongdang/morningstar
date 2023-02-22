@@ -1,5 +1,45 @@
 # Luong Dang's Technical Assessment for Morningstar
 
+```mermaid
+---
+title: Infrastructure Diagram
+---
+
+flowchart TB
+    client([client])
+    -.->|morningstar.ldresearch.ca| dns1(GoDaddy DNS server)
+    -.->|forward subdomain| dns2(AWS Route 53)
+    -.->|k8s-app...amazonws.com| ingress(AWS Load Balancer)
+
+    subgraph cluster [EKS Cluster]
+        subgraph control-plane[Control Plane]
+            aws-load-balancer-controller(aws-load-balancer-controller service)
+            external-dns(external-dns service)
+        end
+
+        ingress
+        -.->|routing rules| service(Timeoff Managerment Service)
+
+        service --> zoneA
+        service --> zoneB
+        subgraph zoneA[Zone A]
+            pod1(Pod)
+            pod2(Pod)
+        end
+        subgraph zoneB[Zone B]
+            pod3(Pod)
+            pod4(Pod)
+        end
+    end
+
+%% These are CSS classes, not OOP classes
+classDef blue fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff
+classDef purple fill:#6B25B0,stroke:#fff,stroke-width:4px,color:#fff
+
+class dns2 purple
+class ingress,service,pod1,pod2,pod3,pod4 blue
+```
+
 ## Features
 
 1. The application is deployed at a friendly domain name: [`morningstar.ldresearch.ca`](https://morningstar.ldresearch.ca/login/), not `k8s-app-...-ca-central-1.elb.amazonws.com`. I own the `ldresearch.ca` domain and use a subdomain for this project.
@@ -91,6 +131,8 @@ aws ec2 describe-instances \
     * [`pipelines/app.yml`](pipelines/app.yml): update the app deployment inside the cluster.
 
 The pipelines are executed by [Azure Devops](https://dev.azure.com/ldresearch0987/Morningstar/_build).
+
+5. Diagram-as-code: the diagram at top was rendered from code by [Mermaid](https://mermaid.js.org/). View the Raw version of this page for details.
 
 ## Challenges
 
