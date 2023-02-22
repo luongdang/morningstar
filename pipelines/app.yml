@@ -19,9 +19,6 @@ jobs:
       - template: steps_configure_aws.yml
       - bash: |
           set -xueo pipefail
-
-          eksctl utils write-kubeconfig -f cluster/morningstar.yml
-          kubectl config current-context
           
           kubectl apply -f app/dns.yml
           kubectl apply -f app/timeoff-management.yml
