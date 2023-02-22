@@ -2,14 +2,15 @@
 
 ## Features
 
-1. The application is deployed at a friendly domain name: [`morningstar.ldresearch.ca`](https://morningstar.ldresearch.ca/login/), not `k8s-app-...-ca-central-1.elb.amazonws.com`.
+1. The application is deployed at a friendly domain name: [`morningstar.ldresearch.ca`](https://morningstar.ldresearch.ca/login/), not `k8s-app-...-ca-central-1.elb.amazonws.com`. I own the `ldresearch.ca` domain and use a subdomain for this project.
 
 2. `HTTP` is automatically redirected to `HTTPS`:
 
 ```bash
 curl -IL http://morningstar.ldresearch.ca    # 1. call HTTP endpoint
+# Output
 HTTP/1.1 301 Moved Permanently
-Server: awselb/2.0    # AWS EKS Load Balancer
+Server: awselb/2.0  # this response came from AWS EKS Load Balancer
 Date: Wed, 22 Feb 2023 11:56:36 GMT
 Content-Type: text/html
 Content-Length: 134
@@ -32,7 +33,21 @@ x-powered-by: Express
 etag: W/"1be5-AkT3wXYoY/B76qPi5F7v+b/XNqE"
 ```
 
-3. The application is HA, with auto-scaling between 2 and 10 pods and strategically load-balanced across two different availability zones:
+3. The application is HA, with auto-scaling between 2 and 10 pods, which are strategically load-balanced across two different availability zones:
+
+```yml
+# app/timeoff-management.yml
+spec:
+  topologySpreadConstraints:
+    - maxSkew: 1
+      whenUnsatisfiable: ScheduleAnyway
+      topologyKey: zone
+      labelSelector:
+      matchLabels:
+        app: timeoff-management
+```
+
+Verify that running pods are indeed located in different availability zones:
 
 ```bash
 # List the pods running the Timeoff Management app
@@ -71,7 +86,7 @@ aws ec2 describe-instances \
 }
 ```
 
-3. CI/CD pipelines that are triggered automatically upon a push to the `main` branch. 
+4. CI/CD pipelines that are triggered automatically upon a push to the `main` branch. 
     * [`pipelines/cluster.yml`](pipelines/clustrer.yml): update the EKS cluster. It has 3 execution modes: `update` (default) will update the existing cluster; `create` will deploy a new cluster; `delete` will remove the cluster from AWS.
     * [`pipelines/app.yml`](pipelines/app.yml): update the app deployment inside the cluster.
 
@@ -85,12 +100,13 @@ The pipelines are executed by [Azure Devops](https://dev.azure.com/ldresearch098
 
 ```yml
 # app/ingress.yml
-# Where do these come from and what do they mean?
-# Took me a while to get to their documentation
-alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ca-central-1:...
+annotations:
+  # Where do these come from and what do they mean?
+  # Took me a while to get to their documentation
+  alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+  alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ca-central-1:...
 ```
 
-* The cert was issue by Let's Encrypt and only valid for 1 month. The `cert-manager` service in the cluster is supposed to handle renewal automatically. However, as the cluster requires manual intervention to get the cert to Amazon Certificate Manager, it will become a hassle in the future. I will investigate other load balancers (NGINX comes to mind) to see if there's an easier solution.
+* The cert was issued by Let's Encrypt and only valid for 1 month. The `cert-manager` service in the EKS cluster is can handle renewal automatically. However, as the cluster requires manual intervention to get the cert to Amazon Certificate Manager, it will become a hassle in the future. I will investigate other load balancers (NGINX comes to mind) to see if there's an easier solution.
 
 * Coming from the Azure cloud, I had limited exposure to AWS. It was often exciting, sometimes frustrating but always exhilarating to experience a new cloud platform.
