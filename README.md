@@ -132,9 +132,9 @@ aws ec2 describe-instances \
 
 The pipelines are executed by [Azure Devops](https://dev.azure.com/ldresearch0987/Morningstar/_build).
 
-5. Diagram-as-code: the diagram at top was rendered from code by [Mermaid](https://mermaid.js.org/). View the Raw version of this page for details.
+5. Diagram-as-code: the diagram at top was written in [Mermaid](https://mermaid.js.org/) and rendered by Github. View the Raw version of this page for details.
 
-## Challenges
+## Challenges in completing the assessment
 
 * The cluster provisioning relies on `eksctl`. While very helpful, the utility is still in pre-release. It has drift-detection, but limit ability to readjust them. Many times, I had to delete and recreate the full cluster which was a time-consuming process.
 
